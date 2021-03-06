@@ -1,7 +1,6 @@
 use rust_decimal::prelude::*;
 use rust_decimal::Decimal;
 use serde::de::{self, Deserializer, Visitor};
-use serde::ser::{self, Serialize, Serializer};
 use serde::Deserialize;
 use std::fmt;
 
@@ -61,20 +60,6 @@ impl fmt::Display for Transaction {
       self.tx(),
       self.amount()
     )
-  }
-}
-
-impl Serialize for Amount {
-  fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-  where
-    S: Serializer,
-  {
-    let mut v = match Decimal::from_u64(self.value) {
-      Some(u) => u,
-      None => return Err(ser::Error::custom("could not serialize amount to decimal")),
-    };
-    v.rescale(4);
-    serializer.serialize_str(&v.to_string())
   }
 }
 

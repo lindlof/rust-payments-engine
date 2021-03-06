@@ -1,3 +1,12 @@
+# Payments Engine in Rust
+
+## Efficiency
+
+Size of `amount` is not well-specified. This code opts for `u64` to allow for large balances.
+
+## Safety
+
+### Account
 
 `Account` struct was made largely mutable. This is because an immutable `Account` would require allocting memory for an `Account` per each transaction which would be time-consuming.
 

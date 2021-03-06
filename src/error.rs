@@ -1,5 +1,7 @@
 #[derive(thiserror::Error, Debug, PartialEq, Clone)]
 pub enum PaymentError {
-  #[error("Invalid input: {0}")]
+  #[error("invalid input: {0}")]
   InputError(String),
+  #[error("error serializing: {0}")]
+  SerializeError(String),
 }

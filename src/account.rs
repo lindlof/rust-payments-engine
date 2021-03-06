@@ -19,7 +19,11 @@ impl Account {
     }
   }
 
+  pub fn client(&self) -> u16 {
+    self.client
+  }
   pub fn total(&self) -> u64 {
+    // Not handling a possible overflow
     self.available + self.held
   }
 }
