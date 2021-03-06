@@ -68,3 +68,20 @@ fn main() {
         process::exit(1);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_amount_to_str() {
+        let v = amount_to_str(200143).unwrap();
+        assert_eq!(v, "20.0143");
+    }
+
+    #[test]
+    fn test_amount_to_str_with_int() {
+        let v = amount_to_str(200000).unwrap();
+        assert_eq!(v, "20");
+    }
+}

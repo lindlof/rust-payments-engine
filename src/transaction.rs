@@ -45,6 +45,7 @@ impl Transaction {
   pub fn tx(&self) -> &u32 {
     &self.tx
   }
+  /// Transaction amount. 0 if amount is not supplied.
   pub fn amount(&self) -> &u64 {
     &self.amount.value
   }
@@ -69,13 +70,16 @@ impl<'de> Visitor<'de> for AmountVisitor {
   type Value = Amount;
 
   fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-    formatter.write_str("an integer between -2^31 and 2^31")
+    formatter.write_str("a decimal or integer")
   }
 
   fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
   where
     E: de::Error,
   {
+    if value.is_empty() {
+      return Ok(Amount { value: 0 });
+    }
     let dec = match Decimal::from_str(value) {
       Ok(d) => d,
       Err(e) => {
