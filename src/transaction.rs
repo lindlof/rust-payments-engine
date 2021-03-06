@@ -8,10 +8,20 @@ use std::fmt;
 #[derive(Deserialize)]
 pub struct Transaction {
   #[serde(rename = "type")]
-  txtype: String,
+  txtype: TxType,
   client: u16,
   tx: u32,
   amount: Amount,
+}
+
+#[derive(Deserialize, Debug)]
+#[serde(rename_all = "snake_case")]
+pub enum TxType {
+  Deposit,
+  Withdrawal,
+  Dispute,
+  Resolve,
+  Chargeback,
 }
 
 struct Amount {
@@ -19,7 +29,15 @@ struct Amount {
 }
 
 impl Transaction {
-  pub fn txtype(&self) -> &String {
+  pub fn new(txtype: TxType, client: u16, tx: u32, amount: u64) -> Transaction {
+    Transaction {
+      txtype,
+      client,
+      tx,
+      amount: Amount { value: amount },
+    }
+  }
+  pub fn txtype(&self) -> &TxType {
     &self.txtype
   }
   pub fn client(&self) -> &u16 {
@@ -37,7 +55,7 @@ impl fmt::Display for Transaction {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     write!(
       f,
-      "Transaction ({}, {}, {}, {:?})",
+      "Transaction ({:?}, {}, {}, {:?})",
       self.txtype(),
       self.client(),
       self.tx(),
